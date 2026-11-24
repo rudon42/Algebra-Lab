@@ -46,6 +46,22 @@ class UnaryOp(Node):
     def __eq__(self, other):
         return type(self) == type(other) and self.child == other.child
 
+class Neg(UnaryOp):
+    def __init__(self, child):
+        super().__init__(child)
+
+    def evaluate(self, env):
+        return self.child.evaluate(env) * -1
+
+    def to_string(self):
+        return "-(" + self.child.to_string() + ")"
+
+    def simplify(self, env):
+        new_child = self.child.simplify()
+        if isinstance(new_child, Num):
+            return Num(new_child.value * -1)
+        return Neg(new_child)
+
 # Operations that need 2 inputs
 
 class BinaryOp(Node):
