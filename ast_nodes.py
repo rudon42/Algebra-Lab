@@ -16,6 +16,8 @@ class Num(Node):
         return self.value
 
     def to_string(self):
+        if self.value < 0:
+            return "(" + str(self.value) + ")"
         return str(self.value)
 
     def simplify(self, env):
@@ -26,7 +28,7 @@ class Var(Node):
         self.name = var_name
 
     def __eq__(self, other):
-        return (isinstance(other, Var) and self.var_name == other.var_name)
+        return (isinstance(other, Var) and self.name == other.name)
 
     def evaluate(self, env):
         return env[self.name]
@@ -70,7 +72,7 @@ class BinaryOp(Node):
         self.right = right
 
     def __eq__(self, other):
-        return (isinstance(other, BinaryOp) and self.left == other.left and self.right == other.right)
+        return type(self) == type(other) and self.left == other.left and self.right == other.right
 
 class Add(BinaryOp):
     def __init__(self, left, right):
