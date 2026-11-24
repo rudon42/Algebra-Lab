@@ -120,3 +120,18 @@ class Div(BinaryOp):
         if isinstance(new_left, Num) and isinstance(new_right, Num):
             return Num(new_left.value / new_right.value)
         return Div(new_left, new_right)
+
+class Equ(BinaryOp):
+    def __init__(self, left, right):
+        super().__init__(left, right)
+
+    def evaluate(self, env):
+        return self.left.evaluate(env) == self.right.evaluate(env)
+
+    def to_string(self):
+        return self.left.to_string() + " = " + self.right.to_string()
+
+    def simplify(self, env):
+        new_left = self.left.simplify(env)
+        new_right = self.right.simplify(env)
+        return Equ(new_left, new_right)
