@@ -9,6 +9,9 @@ class Num(Node):
     def __init__(self, value):
         self.value = value
 
+    def __eq__(self, other):
+        return (isinstance(other, Num) and self.value == other.value)
+
     def evaluate(self, env):
         return self.value
 
@@ -22,6 +25,9 @@ class Var(Node):
     def __init__(self, var_name):
         self.name = var_name
 
+    def __eq__(self, other):
+        return (isinstance(other, Var) and self.var_name == other.var_name)
+
     def evaluate(self, env):
         return env[self.name]
 
@@ -34,17 +40,11 @@ class Var(Node):
 # Operations that need 1 input
 
 class UnaryOp(Node):
-    def __init__(self, arg):
-        self.arg = arg
+    def __init__(self, child):
+        self.child = child
 
-    def evaluate(self, env):
-        pass
-
-    def to_string(self):
-        pass
-
-    def simplify(self):
-        pass
+    def __eq__(self, other):
+        return type(self) == type(other) and self.child == other.child
 
 # Operations that need 2 inputs
 
@@ -52,6 +52,9 @@ class BinaryOp(Node):
     def __init__(self, left, right):
         self.left = left
         self.right = right
+
+    def __eq__(self, other):
+        return (isinstance(other, BinaryOp) and self.left == other.left and self.right == other.right)
 
 class Add(BinaryOp):
     def __init__(self, left, right):
